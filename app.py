@@ -2,21 +2,22 @@ from flask import Flask, render_template, request, redirect
 import mysql.connector
 import os
 
-app = Flask(__name__)
+app = Flask(_name_)
 
 db_config = {
-    "host": os.environ.get("DB_HOST", "localhost"),
-    "user": os.environ.get("DB_USER", "root"),
-    "password": os.environ.get("DB_PASSWORD", "12345"),
-    "database": os.environ.get("DB_NAME")
+    "host": os.getenv("DB_HOST"),
+    "user": os.getenv("DB_USER"),
+    "password": os.getenv("DB_PASSWORD"),
+    "port": int(os.getenv("DB_PORT"))
 }
 
-def connect(db):
+def connect():
     return mysql.connector.connect(
         host=db_config["host"],
         user=db_config["user"],
         password=db_config["password"],
-        database=db
+        port=db_config["port"],
+        database="railway"
     )
 
 @app.route("/")
@@ -24,11 +25,10 @@ def home():
     return render_template("index.html")
 
 
-# ---------------- FEEDBACK MODULE ----------------
 @app.route("/add_feedback", methods=["GET", "POST"])
 def add_feedback():
     if request.method == "POST":
-        conn = connect("college_feedback_db")
+        conn = connect()
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO feedback (user_name, message, rating) VALUES (%s, %s, %s)",
@@ -37,15 +37,13 @@ def add_feedback():
         conn.commit()
         conn.close()
         return redirect("/")
-
     return render_template("add_feedback.html")
 
 
-# ---------------- COURSE MODULE ----------------
 @app.route("/add_course", methods=["GET", "POST"])
 def add_course():
     if request.method == "POST":
-        conn = connect("college_courses_db")
+        conn = connect()
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO courses (course_name, duration) VALUES (%s, %s)",
@@ -54,15 +52,13 @@ def add_course():
         conn.commit()
         conn.close()
         return redirect("/")
-
     return render_template("add_course.html")
 
 
-# ---------------- ENROLLMENT MODULE ----------------
 @app.route("/add_enrollment", methods=["GET", "POST"])
 def add_enrollment():
     if request.method == "POST":
-        conn = connect("college_enrollments_db")
+        conn = connect()
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO enrollments (student_id, course_id) VALUES (%s, %s)",
@@ -71,9 +67,9 @@ def add_enrollment():
         conn.commit()
         conn.close()
         return redirect("/")
-
     return render_template("add_enrollment.html")
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
+if _name_ == "_main_":
+    port=int(os.environ.get("PORT",5000))
+    app.run(host="0.0.0.0",port=port)
