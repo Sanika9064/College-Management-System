@@ -2,13 +2,13 @@ from flask import Flask, render_template, request, redirect
 import mysql.connector
 import os
 
-app = Flask(_name_)
+app = Flask(__name__)   # ✅ FIXED
 
 db_config = {
     "host": os.getenv("DB_HOST"),
     "user": os.getenv("DB_USER"),
     "password": os.getenv("DB_PASSWORD"),
-    "port": int(os.getenv("DB_PORT"))
+    "port": int(os.getenv("DB_PORT", 3306))
 }
 
 def connect():
@@ -70,6 +70,9 @@ def add_enrollment():
     return render_template("add_enrollment.html")
 
 
-if _name_ == "_main_":
-    port=int(os.environ.get("PORT",5000))
-    app.run(host="0.0.0.0",port=port)
+# ⚠ This block is NOT needed for Render when using gunicorn
+# But keeping it for local testing only
+
+if __name__ == "__main__":   # ✅ FIXED
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
