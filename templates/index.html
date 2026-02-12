@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>College Management System</title>
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#141e30,#243b55);
+color:white;
+text-align:center;
+}
+.container{padding:40px;}
+.card{
+background:rgba(255,255,255,0.1);
+margin:20px auto;
+padding:25px;
+width:60%;
+border-radius:20px;
+backdrop-filter:blur(12px);
+}
+input,select,textarea{
+width:80%;
+padding:10px;
+margin:8px;
+border:none;
+border-radius:10px;
+}
+button{
+padding:10px 20px;
+background:#00c6ff;
+border:none;
+border-radius:25px;
+color:white;
+cursor:pointer;
+}
+button:hover{background:#0072ff;}
+.circle{
+position:absolute;
+border-radius:50%;
+opacity:0.2;
+}
+.circle1{width:220px;height:220px;background:#00c6ff;top:40px;left:40px;}
+.circle2{width:180px;height:180px;background:white;bottom:40px;right:40px;}
+</style>
+</head>
+<body>
+<div class="circle circle1"></div>
+<div class="circle circle2"></div>
+
+<div class="container">
+<h1>College Management System</h1>
+
+<div class="card">
+<h2>Course Module</h2>
+<form method="POST" action="/add_course">
+<input type="text" name="course_name" placeholder="Course Name" required><br>
+<input type="text" name="duration" placeholder="Duration" required><br>
+<button>Add Course</button>
+</form>
+</div>
+
+<div class="card">
+<h2>Enrollment Module</h2>
+<form method="POST" action="/add_enrollment">
+<input type="number" name="student_id" placeholder="Student ID" required><br>
+<input type="number" name="course_id" placeholder="Course ID" required><br>
+<button>Enroll</button>
+</form>
+</div>
+
+<div class="card">
+<h2>Feedback Module</h2>
+<form method="POST" action="/add_feedback">
+<input type="text" name="user_name" placeholder="Your Name" required><br>
+<textarea name="message" placeholder="Feedback..." required></textarea><br>
+<input type="number" name="rating" min="1" max="5" placeholder="Rating (1-5)" required><br>
+<button>Submit Feedback</button>
+</form>
+</div>
+
+</div>
+</body>
+</html>
