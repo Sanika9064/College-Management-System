@@ -2,22 +2,15 @@ from flask import Flask, render_template, request, redirect
 import mysql.connector
 import os
 
-app = Flask(__name__)   # ✅ FIXED
-
-db_config = {
-    "host": os.getenv("DB_HOST"),
-    "user": os.getenv("DB_USER"),
-    "password": os.getenv("DB_PASSWORD"),
-    "port": int(os.getenv("DB_PORT", 3306))
-}
+app = Flask(__name__)
 
 def connect():
     return mysql.connector.connect(
-        host=db_config["host"],
-        user=db_config["user"],
-        password=db_config["password"],
-        port=db_config["port"],
-        database="railway"
+        host=os.getenv("DB_HOST"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        port=int(os.getenv("DB_PORT")),
+        database=os.getenv("DB_NAME")
     )
 
 @app.route("/")
@@ -35,6 +28,7 @@ def add_feedback():
             (request.form["user_name"], request.form["message"], request.form["rating"])
         )
         conn.commit()
+        cursor.close()
         conn.close()
         return redirect("/")
     return render_template("add_feedback.html")
@@ -50,6 +44,7 @@ def add_course():
             (request.form["course_name"], request.form["duration"])
         )
         conn.commit()
+        cursor.close()
         conn.close()
         return redirect("/")
     return render_template("add_course.html")
@@ -65,14 +60,12 @@ def add_enrollment():
             (request.form["student_id"], request.form["course_id"])
         )
         conn.commit()
+        cursor.close()
         conn.close()
         return redirect("/")
     return render_template("add_enrollment.html")
 
 
-# ⚠ This block is NOT needed for Render when using gunicorn
-# But keeping it for local testing only
-
-if __name__ == "__main__":   # ✅ FIXED
+if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
