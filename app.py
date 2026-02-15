@@ -18,7 +18,7 @@ def connect():
         user=url.username,
         password=url.password,
         port=url.port,
-        database=url.path[1:]  # remove leading /
+        database=url.path[1:]  
     )
 
 
